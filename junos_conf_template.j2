@@ -1,0 +1,539 @@
+system {
+    host-name {{ hostname }};
+    domain-name {{ domain_name }};
+    root-authentication {
+        encrypted-password "{{ root_encrypted_password }}"; ## Secret data
+    }
+    tacplus-server {
+        10.28.4.50 {
+            secret "$9$ZBji.n6Cu0I368X7NwsQz390BcSl8xNoJz6/AIRbsYgZU"; ## SECRET-DATA
+            source-address {{ mgmt_ip }};
+        }
+        10.65.4.50 {
+            secret "$9$mTQnOBRSyK0BwYg4GUtp0Iyl8L7w24k.pB1EKvZUDimf"; ## SECRET-DATA
+            source-address {{ mgmt_ip }};
+        }
+    }
+    login {
+        message "\n\n\n\tUNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED\n\n\tYou must have explicit, authorized permission to access or \n\tconfigure this device. Unauthorized attempts and actions to \n\taccess or use this system may result in civil and/or criminal \n\tpenalties. All activities performed on this device are logged \n\tand monitored.\n\n\n";
+        user remote {
+            full-name "All remote users";
+            uid 2000;
+            class super-user;
+        }
+    }
+    services {
+	ssh;
+    }
+}
+protocols {
+    lldp {
+        interface all;
+    }
+}
+routing-instances {
+    ri1 {
+        instance-type virtual-router;
+        interface {{ uplink_spine1 }}.0;
+        interface {{ uplink_spine2 }}.0;
+        interface vlan.{{ id_vlan1 }};
+        protocols {
+            ospf {
+                export OSPF_Out;
+                area 0.0.0.{{ area_id }} {
+                    nssa {
+                        default-lsa metric-type 1;
+                        no-summaries;
+                    }
+                    interface {{ uplink_spine1 }}.0 {
+                        hello-interval 1;
+                        dead-interval 3;
+                    }
+                    interface {{ uplink_spine2 }}.0 {
+                        hello-interval 1;
+                        dead-interval 3;
+                    }
+                }
+            }
+        }
+    }
+}
+interfaces {
+    me0 {
+	description "{{ rack_location }}";
+        unit 0 {
+            family inet {
+                address {{ mgmt_ip }}/{{ cidr_bits }};
+            }
+        }
+    }
+    {{ uplink_spine1 }} {
+        unit 0 {    
+            family inet {
+                address {{ uplink_ip_spine1 }}/{{ uplink_cidr_spine1 }};
+            }
+        }
+    }
+    {{ uplink_spine2 }} {
+        unit 0 {
+            family inet {
+                address {{ uplink_ip_spine2 }}/{{ uplink_cidr_spine1 }};
+            }
+        }
+    }
+    vlan {
+        unit {{ id_vlan1 }} {
+            family inet {
+                address {{ l3_ip_vlan1 }}/{{ l3_cidr_vlan1 }};
+            }
+        }
+    }
+    {{ port0 }} {
+    description "{{ desc_port0 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port0 }};
+                vlan members {{ vlan_port0 }};
+            }
+        }
+    }
+    {{ port1 }} {
+    description "{{ desc_port1 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port1 }};
+                vlan members {{ vlan_port1 }};
+            }
+        }
+    }
+    {{ port2 }} {
+    description "{{ desc_port1 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port2 }};
+                vlan members {{ vlan_port2 }};
+            }
+        }
+    }
+    {{ port3 }} {
+    description "{{ desc_port3 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port3 }};
+                vlan members {{ vlan_port3 }};
+            }
+        }
+    }
+    {{ port4 }} {
+    description "{{ desc_port4 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port4 }};
+                vlan members {{ vlan_port4 }};
+            }
+        }
+    }
+    {{ port5 }} {
+    description "{{ desc_port5 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port5 }};
+                vlan members {{ vlan_port5 }};
+            }
+        }
+    }
+    {{ port6 }} {
+    description "{{ desc_port6 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port6 }};
+                vlan members {{ vlan_port6 }};
+            }
+        }
+    }
+    {{ port7 }} {
+    description "{{ desc_port7 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port7 }};
+                vlan members {{ vlan_port7 }};
+            }
+        }
+    }
+    {{ port8 }} {
+    description "{{ desc_port8 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port8 }};
+                vlan members {{ vlan_port8 }};
+            }
+        }
+    }
+    {{ port9 }} {
+    description "{{ desc_port9 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port9 }};
+                vlan members {{ vlan_port9 }};
+            }
+        }
+    }
+    {{ port10 }} {
+    description "{{ desc_port10 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port10 }};
+                vlan members {{ vlan_port10 }};
+            }
+        }
+    }
+    {{ port11 }} {
+    description "{{ desc_port11 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port11 }};
+                vlan members {{ vlan_port11 }};
+            }
+        }
+    }
+    {{ port12 }} {
+    description "{{ desc_port12 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port12 }};
+                vlan members {{ vlan_port12 }};
+            }
+        }
+    }
+    {{ port31 }} {
+    description "{{ desc_port13 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port13 }};
+                vlan members {{ vlan_port13 }};
+            }
+        }
+    }
+    {{ port13 }} {
+    description "{{ desc_port13 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port13 }};
+                vlan members {{ vlan_port13 }};
+            }
+        }
+    }
+    {{ port14 }} {
+    description "{{ desc_port14 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port14 }};
+                vlan members {{ vlan_port14 }};
+            }
+        }
+    }
+    {{ port15 }} {
+    description "{{ desc_port15 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port15 }};
+                vlan members {{ vlan_port15 }};
+            }
+        }
+    }
+    {{ port16 }} {
+    description "{{ desc_port16 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port16 }};
+                vlan members {{ vlan_port16 }};
+            }
+        }
+    }
+    {{ port16 }} {
+    description "{{ desc_port16 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port16 }};
+                vlan members {{ vlan_port16 }};
+            }
+        }
+    }
+    {{ port17 }} {
+    description "{{ desc_port17 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port17 }};
+                vlan members {{ vlan_port17 }};
+            }
+        }
+    }
+    {{ port18 }} {
+    description "{{ desc_port18 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port18 }};
+                vlan members {{ vlan_port18 }};
+            }
+        }
+    }
+    {{ port19 }} {
+    description "{{ desc_port19 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port19 }};
+                vlan members {{ vlan_port19 }};
+            }
+        }
+    }
+    {{ port20 }} {
+    description "{{ desc_port20 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port20 }};
+                vlan members {{ vlan_port20 }};
+            }
+        }
+    }
+    {{ port21 }} {
+    description "{{ desc_port21 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port21 }};
+                vlan members {{ vlan_port21 }};
+            }
+        }
+    }
+    {{ port22 }} {
+    description "{{ desc_port22 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port22 }};
+                vlan members {{ vlan_port22 }};
+            }
+        }
+    }
+    {{ port23 }} {
+    description "{{ desc_port23 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port23 }};
+                vlan members {{ vlan_port23 }};
+            }
+        }
+    }
+    {{ port24 }} {
+    description "{{ desc_port24 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port24 }};
+                vlan members {{ vlan_port24 }};
+            }
+        }
+    }
+    {{ port25 }} {
+    description "{{ desc_port25 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port25 }};
+                vlan members {{ vlan_port25 }};
+            }
+        }
+    }
+    {{ port26 }} {
+    description "{{ desc_port26 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port26 }};
+                vlan members {{ vlan_port26 }};
+            }
+        }
+    }
+    {{ port27 }} {
+    description "{{ desc_port27 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port27 }};
+                vlan members {{ vlan_port27 }};
+            }
+        }
+    }
+    {{ port28 }} {
+    description "{{ desc_port28 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port28 }};
+                vlan members {{ vlan_port28 }};
+            }
+        }
+    }
+    {{ port29 }} {
+    description "{{ desc_port29 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port29 }};
+                vlan members {{ vlan_port29 }};
+            }
+        }
+    }
+    {{ port30 }} {
+    description "{{ desc_port30 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port30 }};
+                vlan members {{ vlan_port30 }};
+            }
+        }
+    }
+    {{ port31 }} {
+    description "{{ desc_port31 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port31 }};
+                vlan members {{ vlan_port31 }};
+            }
+        }
+    }
+    {{ port32 }} {
+    description "{{ desc_port32 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port32 }};
+                vlan members {{ vlan_port32 }};
+            }
+        }
+    }
+    {{ port33 }} {
+    description "{{ desc_port33 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port33 }};
+                vlan members {{ vlan_port33 }};
+            }
+        }
+    }
+    {{ port34 }} {
+    description "{{ desc_port34 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port34 }};
+                vlan members {{ vlan_port34 }};
+            }
+        }
+    }
+    {{ port35 }} {
+    description "{{ desc_port35 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port35 }};
+                vlan members {{ vlan_port35 }};
+            }
+        }
+    }
+    {{ port36 }} {
+    description "{{ desc_port36 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port36 }};
+                vlan members {{ vlan_port36 }};
+            }
+        }
+    }
+    {{ port38 }} {
+    description "{{ desc_port38 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port38 }};
+                vlan members {{ vlan_port38 }};
+            }
+        }
+    }
+    {{ port39 }} {
+    description "{{ desc_port39 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port39 }};
+                vlan members {{ vlan_port39 }};
+            }
+        }
+    }
+    {{ port40 }} {
+    description "{{ desc_port40 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port40 }};
+                vlan members {{ vlan_port40 }};
+            }
+        }
+    }
+    {{ port41 }} {
+    description "{{ desc_port41 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port41 }};
+                vlan members {{ vlan_port41 }};
+            }
+        }
+    }
+    {{ port42 }} {
+    description "{{ desc_port42 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port42 }};
+                vlan members {{ por42 }};
+            }
+        }
+    }
+    {{ port43 }} {
+    description "{{ desc_port43 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port43 }};
+                vlan members {{ vlan_port43 }};
+            }
+        }
+    }
+    {{ port44 }} {
+    description "{{ desc_port44 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port44 }};
+                vlan members {{ vlan_port44 }};
+            }
+        }
+    }
+    {{ port45 }} {
+    description "{{ desc_port45 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port45 }};
+                vlan members {{ vlan_port45 }};
+            }
+        }
+    }
+    {{ port46 }} {
+    description "{{ desc_port46 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port46 }};
+                vlan members {{ vlan_port46 }};
+            }
+        }
+    }
+    {{ port47 }} {
+    description "{{ desc_port47 }}";
+        unit 0 {
+            family ethernet-switching {
+                port-mode {{ mode_port47 }};
+                vlan members {{ vlan_port47 }};
+            }
+        }
+    }
+}
+vlans {
+    {{ name_vlan1 }} {
+        vlan-id {{ id_vlan1 }};
+        l3-interface vlan.{{ id_vlan1 }};
+    }
+}
+
